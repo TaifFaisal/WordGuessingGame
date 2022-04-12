@@ -22,13 +22,13 @@ public class GameServer {
         System.out.println("ChatServer started");
 		System.out.println("[SERVER] waiting for client connections");
         try {
-        	while(true) {
+        	while(true) 
+        	{
             	Socket clientSocket = serverSocket.accept();
             	System.err.println("Created socket with client : " + clientSocket.getLocalAddress().getHostName());
             	ClientHandler client = new ClientHandler(clientSocket,game.GetAWord());
             	clients.add(client);
             	pool.execute(client);
-            	
             }
         }
         finally {

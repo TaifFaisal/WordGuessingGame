@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.*;
+
 import GuessingGame.Word;
 
 public class ClientHandler extends Thread {
@@ -14,6 +17,7 @@ public class ClientHandler extends Thread {
     private Word word;
     private String CurrentWord;
 
+    
     public ClientHandler(Socket socket,Word word) throws IOException {
         this.socket = socket;
         this.word = word;
@@ -23,24 +27,66 @@ public class ClientHandler extends Thread {
 
     }
 
-    public void println(String s) {
+    public void println(String s) 
+    {
         out.println(s);
     }
 
     public void run() {
-        try {
-        	String request;
-            while ((request = in.readLine()) != null) {
-            	if(request.equals("!start"))
-            		println(CurrentWord);
-                if(request.equals("!hint")){
-                    println(word.getHint());
-                }
-            }
-            in.close();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+
+
+        	String playerGuess;
+			try {
+//		        System.out.printf("CurrentWord:%s\n", CurrentWord);
+
+				while ((playerGuess = in.readLine()) != null)
+				{
+						System.out.printf("playerGuess1:%s\n", playerGuess);
+//						if(playerGuess.equals("!start"))
+//		            		println(CurrentWord);
+						if(playerGuess.equals("!hint"))
+		                    println(word.getHint());
+						else if(playerGuess.equals(CurrentWord))
+						{	
+							//a new word should be selected!
+							
+		                	println("Correct");
+		                	println(CurrentWord);
+		                }
+						else if(!playerGuess.equals(CurrentWord))
+		                	println("Wrong");
+						else if(playerGuess.equals("!quit"))
+							break;
+				}
+			}
+			catch ( SocketException e1) 
+			{
+				e1.printStackTrace();
+			}
+			catch(IOException e2)
+			{
+				e2.printStackTrace();
+			}
+
+//        	String request;
+//            while ((request = in.readLine()) != null) 
+//            {
+//            	if(request.equals("!start"))
+//            		println(CurrentWord);
+//            	
+//            	if(request.equals("!hint"))
+//                    println(word.getHint());
+
+//            	else if(request.equals(CurrentWord))
+//                	println("Correct answer!");
+//                
+//                else if(!request.equals(CurrentWord))
+//                	println("Wrong answer! try again..");
+//            }
+//            in.close();
+//        } catch (Exception e1) {
+//            e1.printStackTrace();
+//        }
 
         try {
             in.close();
@@ -51,6 +97,7 @@ public class ClientHandler extends Thread {
             out.close();
         }
         System.err.println("closing socket");
+        
     }
 
 

@@ -12,7 +12,8 @@ public class GuessingGame {
 		return word;
 	}
 
-	public String getHint(){
+	public String getHint()
+	{
 		return word.getHint();
 	}
 	
